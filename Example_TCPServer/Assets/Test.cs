@@ -8,7 +8,7 @@ public class Test : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		TCPSocketManager tcpMgr=TCPSocketManager.Instance;
-		TCPSocketManager tcpMgr1=TCPSocketManager.Instance;
+        tcpMgr.Init();
 	}
 	
 	// Update is called once per frame
@@ -18,7 +18,7 @@ public class Test : MonoBehaviour {
 
 	void OnGUI(){
 		if(GUILayout.Button("Click")){
-			Debug.Log("重新进入 "+(TCPSocketManager.Instance==TCPSocketManager.Instance));
+
 			
 			if(SceneManager.GetActiveScene().name=="AAA"){
 					SceneManager.LoadScene("BBB");
@@ -31,5 +31,7 @@ public class Test : MonoBehaviour {
 		if(GUILayout.Button("send")){
 			 TCPSocketManager.Instance.Broadcast("i'm server msg!");
 		}
+
+        GUILayout.Label("当前客户端数量:" + TCPSocketManager.Instance.NumClients);
 	}
 }

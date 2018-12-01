@@ -12,6 +12,8 @@ public class TCPUserToken
 {
 
     public event SocketChange OnStatusChange=null;
+
+    public bool connected = false;
     
     private Socket _socket;
     private Thread _thread;
@@ -21,7 +23,7 @@ public class TCPUserToken
     public TCPUserToken(Socket sk)
     {
         this._socket = sk;
-
+        connected = true;
         _thread = new Thread(ReceiveMsg);
         _thread.IsBackground = true;
         _thread.Start();
@@ -46,7 +48,8 @@ public class TCPUserToken
             catch (SocketException se)
             {
                 Debug.Log("Socket Exception:" + se.Message);
-                
+                //客户端已经断开链接
+                connected = false;
                 socketEvent=new SocketState(SocketStateType.DISCONNECTED,this);
                 if(OnStatusChange!=null){
                     OnStatusChange(socketEvent);   

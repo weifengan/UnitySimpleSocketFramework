@@ -23,7 +23,9 @@ public class TCPSocketManager : MonoBehaviour
 
     private Thread _listenThread;
 
-
+    /// <summary>
+    /// 客户端列表
+    /// </summary>
     private Dictionary<string,TCPUserToken> _userList=new Dictionary<string, TCPUserToken>();
     private bool loop = true;
     private static TCPSocketManager _instance;
@@ -35,15 +37,14 @@ public class TCPSocketManager : MonoBehaviour
             {
                 GameObject go = new GameObject("_" + typeof(TCPSocketManager).Name);
                 _instance = go.AddComponent<TCPSocketManager>();
-
-                _instance.Init();
                 DontDestroyOnLoad(_instance);
             }
             return _instance;
         }
     }
-
-    ///初始化服务器
+    /// <summary>
+    /// 初始化TCP Socket Manager
+    /// </summary>
     public void Init(string host = "127.0.0.1", int port = 9339)
     {
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -82,6 +83,7 @@ public class TCPSocketManager : MonoBehaviour
             TCPUserToken token=new TCPUserToken(clientsk);
             token.OnStatusChange+=OnUserTokenStatusChanged;
 
+            //添加到客户端列表中
             _userList.Add(token.IPE,token);
         }
     }
@@ -126,5 +128,14 @@ public class TCPSocketManager : MonoBehaviour
     {
         loop = false;
         ShutDown();
+    }
+
+
+    public int NumClients
+    {
+        get
+        {
+            return _userList.Count;
+        }
     }
 }
